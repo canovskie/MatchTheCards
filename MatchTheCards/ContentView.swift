@@ -1,24 +1,33 @@
-//
-//  ContentView.swift
-//  MatchTheCards
-//
-//  Created by Can on 9.06.2024.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var game = CardMatchingGame()
+    
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text("Card Matching Game")
+                .font(.largeTitle)
+                .padding()
+            
+            LazyVGrid(columns: columns, spacing: 10) {
+                ForEach(game.cards) { card in
+                    CardView(card: card)
+                        .onTapGesture {
+                            game.flipCard(card)
+                        }
+                }
+            }.padding()
         }
-        .padding()
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(game: CardMatchingGame())
 }
